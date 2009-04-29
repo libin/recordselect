@@ -53,7 +53,9 @@ module RecordSelect
         label = label_for_field(current, controller)
       end
 
-      url = url_for({:action => :browse, :controller => options[:controller], :escape => false}.merge(options[:params]))
+      # Remove adapter to avoid wrapped by active_scaffold
+      options[:params].delete 'adapter'
+      url = url_for(options[:params].merge({:action => :browse, :controller => options[:controller], :escape => false}))
 
       html = text_field_tag(name, nil, :autocomplete => 'off', :id => options[:id], :class => options[:class], :onfocus => "this.focused=true", :onblur => "this.focused=false")
       html << javascript_tag("new RecordSelect.Single(#{options[:id].to_json}, #{url.to_json}, {id: #{id.to_json}, label: #{label.to_json}, onchange: #{options[:onchange] || ''.to_json}});")
@@ -97,7 +99,9 @@ module RecordSelect
 
       current = current.inject([]) { |memo, record| memo.push({:id => record.id, :label => label_for_field(record, controller)}) }
 
-      url = url_for({:action => :browse, :controller => options[:controller], :escape => false}.merge(options[:params]))
+      # Remove adapter to avoid wrapped by active_scaffold
+      options[:params].delete 'adapter'
+      url = url_for(options[:params].merge({:action => :browse, :controller => options[:controller], :escape => false}))
 
       html = text_field_tag("#{name}[]", nil, :autocomplete => 'off', :id => options[:id], :class => options[:class], :onfocus => "this.focused=true", :onblur => "this.focused=false")
       html << content_tag('ul', '', :class => 'record-select-list');
