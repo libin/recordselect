@@ -54,7 +54,7 @@ module RecordSelect
       end
 
       # Remove adapter to avoid wrapped by active_scaffold
-      options[:params].delete 'adapter'
+      ['adapter', 'id'].each{ |p| options[:params].delete p }
       url = url_for(options[:params].merge({:action => :browse, :controller => options[:controller], :escape => false}))
 
       html = text_field_tag(name, nil, :autocomplete => 'off', :id => options[:id], :class => options[:class], :onfocus => "this.focused=true", :onblur => "this.focused=false")
@@ -100,7 +100,7 @@ module RecordSelect
       current = current.inject([]) { |memo, record| memo.push({:id => record.id, :label => label_for_field(record, controller)}) }
 
       # Remove adapter to avoid wrapped by active_scaffold
-      options[:params].delete 'adapter'
+      ['adapter', 'id'].each{ |p| options[:params].delete p }
       url = url_for(options[:params].merge({:action => :browse, :controller => options[:controller], :escape => false}))
 
       html = text_field_tag("#{name}[]", nil, :autocomplete => 'off', :id => options[:id], :class => options[:class], :onfocus => "this.focused=true", :onblur => "this.focused=false")
